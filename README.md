@@ -1,27 +1,38 @@
-# React + TypeScript + Vite
+# npm-package-vite-lib-mode
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+installed plugins
+- @vitejs/plugin-react
+- vite-plugin-dts
 
-Currently, two official plugins are available:
+`vite.config.ts`
+```ts
+import { resolve } from 'path'
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import dts from 'vite-plugin-dts'
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
+// https://vitejs.dev/config/
+export default defineConfig({
+  build: {
+    lib: {
+      entry: resolve(__dirname, 'src/index.ts'),
+      name: 'MySampleLibrary',
+      fileName: 'index',
+      formats: ['es', 'umd'], // es module and umd
+    },
+  },
+  plugins: [react(), dts()],
+})
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+
+## build package
+
+```shell
+pnpm run build
+```
+
+The build is going well, you will see the following files in `dist`
+- index.js
+- index.d.ts
+- index.umd.js
